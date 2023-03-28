@@ -2,18 +2,21 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import './searchbox.css';
-const SearchBox = ({ setHeight }) => {
+const SearchBox = ({ setHeight, onSearchSuccess, onSearchError, setSearchWeatherData }) => {
     const [searchCity, setSearchCity] = useState('');
-    const [searched, setSearched] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    const [isSearched, setIsSearched] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    const [weatherData, setWeatherData] = useState(null);
     const buttonRef = useRef(null);
     const handleSearch = async () => {
         if (searchCity.trim()) {
             try {
-                setSearched(true);
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/weather?q=${searchCity}&appid=${process.env.REACT_APP_API_KEY}&units=metric`);
+                setIsSearched(true);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/weather?q=${encodeURIComponent(searchCity)}&appid=${process.env.REACT_APP_API_KEY}&units=metric`);
                 const data = await response.json();
-                console.log(data);
-                // return data;
+                setSearchWeatherData(data);
+                onSearchSuccess();
             } catch (error) {
                 console.log(`Error occured while fetching data ${error}`);
             }
@@ -26,23 +29,19 @@ const SearchBox = ({ setHeight }) => {
 
     const handleSearchButton = (e) => {
         e.preventDefault();
-        setSearched(true);
+        setIsSearched(true);
         handleSearch();
         setHeight(500);
 
     };
     const hanleClickOutSide = useCallback((e) => {
         if (buttonRef.current && !buttonRef.current.contains(e.target)) {
-            setSearched(false);
-            setHeight([]);
-            if (!searched) {
-                setSearched(false);
-                setHeight(0);
-            }
+            setIsSearched(false);
+            setHeight(60);
         }
-    }, [buttonRef, setSearched, setHeight]);
+    }, [buttonRef, setIsSearched, setHeight]);
     useEffect(() => {
-        document.addEventListener("click", hanleClickOutSide);
+        document.addEventListener('click', hanleClickOutSide);
         return () => {
             document.removeEventListener('click', hanleClickOutSide);
         };
@@ -58,6 +57,7 @@ const SearchBox = ({ setHeight }) => {
                     placeholder="Input your location"
                 />
                 <button
+                    ref={buttonRef}
                     type="button"
                     className="search-button"
                     onClick={handleSearchButton}

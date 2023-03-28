@@ -1,0 +1,48 @@
+/* CSS styles for the fallback UI */
+.error-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .error-message {
+    font-size: 2rem;
+    color: red;
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  .retry-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .retry-button:hover {
+    background-color: darkblue;
+  }
+   
+  /* CSS keyframes for the shake animation */
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-0.5rem);
+    }
+    50% {
+      transform: translateX(0.5rem);
+    }
+    75% {
+      transform: translateX(-0.5rem);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
