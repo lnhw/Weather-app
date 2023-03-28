@@ -1,0 +1,11 @@
+.not-found {
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+    /* scale: 0;
+    opacity: 0; */
+}
+.not-found img {
+    max-width: 60%;
+    margin: auto;
+}
