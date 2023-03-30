@@ -13,10 +13,17 @@ const SearchBox = ({ setHeight, onSearchSuccess, onSearchError, setSearchWeather
         if (searchCity.trim()) {
             try {
                 setIsSearched(true);
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/weather?q=${encodeURIComponent(searchCity)}&appid=${process.env.REACT_APP_API_KEY}&units=metric`);
-                const data = await response.json();
-                setSearchWeatherData(data);
-                onSearchSuccess();
+                // const response = await fetch(`${process.env.REACT_APP_API_URL}/weather?q=${searchCity}&appid=${process.env.REACT_APP_API_KEY}&units=metric`);
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=bbf413c59b25eaa25d2ce548b2ffe6a2&units=metric`)
+                if (response.ok) {
+                    const data = await response.json();
+                    setSearchWeatherData(data);
+                    onSearchSuccess();
+                } else {
+                    throw new Error('Response not OK');
+                }
+                // setSearchWeatherData(data);
+                // onSearchSuccess();
             } catch (error) {
                 console.log(`Error occured while fetching data ${error}`);
             }
